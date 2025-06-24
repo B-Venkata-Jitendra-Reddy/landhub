@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">Booking Visitor List</h1>
+
+        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+          <ol class="breadcrumb text-center justify-content-center">
+            <li class="breadcrumb-item"><a href="index.html">Land</a></li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">
+              Properties
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .visit-card {
+    background-color: #f9fafa;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 85, 85, 0.08);
+    border: 1px solid #e1e5e9;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .visit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 85, 85, 0.12);
+  }
+
+  .visit-card h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #005555;
+    margin-bottom: 0.75rem;
+  }
+
+  .visit-card p {
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  .visit-card small.text-muted {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  .container>h2 {
+    font-weight: 600;
+    color: #003333;
+  }
+</style>
+
+
+
+
+<div class="container mt-5" style="margin-bottom: 200px;"> 
+  <h2 class="mb-4" style="text-align: center;">Booking Visitor List</h2>
+
+  {% for req in requests %}
+  <div class="visit-card mb-3">
+    <h5>{{ req.full_name }} ({{ req.email }})</h5>
+    <p><strong>Phone:</strong> {{ req.phone_number }}</p>
+    <p><strong>Message:</strong> {{ req.message|default:"No message" }}</p>
+    <p><small class="text-muted">Requested at: {{ req.requested_at }}</small></p>
+  </div>
+  {% empty %}
+  <div class="visit-card">
+    <p>No visit requests yet.</p>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,300 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+
+<head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+
+
+
+    <!-- Favicons -->
+    <link href="/media/assets/img/favicon.png" rel="icon">
+    <link href="/media/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Vendor CSS Files -->
+    <link href="/media/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/media/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/media/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/media/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="/media/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="/media/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/media/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/media/assets/css/style.css" rel="stylesheet">
+    <link href="/media/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">My Profile</h1>
+
+                    <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                        <ol class="breadcrumb text-center justify-content-center">
+                            <li class="breadcrumb-item"><a href="index.html">Edit Profile</a></li>
+                            <li class="breadcrumb-item active text-white-50" aria-current="page">
+                                Profile Details
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="main" class="main" style="margin-left: -5px;">
+
+        <div class="pagetitle" style="margin-top: -50px; margin-left: 45px;">
+            <h1>Profile</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'my_profile' %}">Profile</a></li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section profile">
+            <div class="row" style="margin-top: -50px;">
+                <div class="col-xl-4" style="margin-left: 40px;">
+
+                    <div class="card" style="height: 270px; width: 400px !important;">
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                            {% if user.userprofile.profile_picture %}
+                            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile" style="border-radius: 100%; height: 130px; ">
+                            {% else %}
+                            <img src="/media/images/Profile_Icon.jpeg" alt="Default Profile">
+                            {% endif %}
+
+                            <h2>{{user.first_name}}</h2>
+                            <h3>@{{user.username}}</h3>
+                            <div class="social-links mt-2">
+                                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-xl-8">
+
+                    <div class="card" style="margin: -300px 0px 0px 450px; width: 710px !important;">
+                        <div class="card-body pt-3">
+                            <!-- Bordered Tabs -->
+                            <ul class="nav nav-tabs nav-tabs-bordered">
+
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab"
+                                        data-bs-target="#profile-overview">Overview</button>
+                                </li>
+
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                                </li>
+
+
+                                <!-- <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab"
+                                        data-bs-target="#profile-change-password">Change Password</button>
+                                </li> -->
+
+                            </ul>
+                            <div class="tab-content pt-2">
+
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <!-- <h5 class="card-title">About</h5>
+                                    <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores
+                                        cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt
+                                        iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea
+                                        saepe at unde.</p> -->
+
+                                    <h5 class="card-title">Profile Details</h5>
+
+                                    <form method="POST" enctype="multipart/form-data" id="profileForm">
+                                        {% csrf_token %}
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                                            <div class="col-lg-9 col-md-8">{{user.first_name}}</div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Username</div>
+                                            <div class="col-lg-9 col-md-8">@{{user.username}}</div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Email</div>
+                                            <div class="col-lg-9 col-md-8">{{user.email}}</div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+                                    <!-- Profile Edit Form -->
+                                    <form method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="save_profile" value="1">
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+
+                                            <div class="col-md-8 col-lg-9">
+                                                {% if user.userprofile.profile_picture %}
+                                                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile"
+                                                    style="border-radius: 25px;">
+                                                {% else %}
+                                                <img src="/media/images/Profile_Icon.jpeg" alt="Default Profile"
+                                                    style="border-radius: 25px;">
+                                                {% endif %}
+
+
+
+
+                                                <div class="pt-2 d-flex align-items-center gap-2"
+                                                    style="width: 535px; margin-left: -15px;">
+                                                    <!-- Upload Icon with custom background color -->
+                                                    <label for="upload-icon" class="btn btn-sm mb-0 text-white"
+                                                        title="Upload new profile image"
+                                                        style="background-color: #005555; cursor: pointer;">
+                                                        <i class="bi bi-upload"></i>
+                                                    </label>
+                                                    <input type="file" id="upload-icon" name="profile_picture"
+                                                        class="d-none" onchange="this.form.submit()">
+
+                                                    <!-- Delete Icon -->
+                                                    <button type="submit" name="delete_picture" value="1"
+                                                        class="btn btn-danger btn-sm" title="Remove my profile image">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                            <div class="col-md-8 col-lg-9" style="width: 560px;">
+                                                <input name="fullName" type="text" class="form-control"
+                                                    value="{{ user.first_name }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-4 col-lg-3 col-form-label">Username</label>
+                                            <div class="input-group" style="width: 560px; margin-bottom: 1rem;">
+                                                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                                <input type="text" name="username" class="form-control"
+                                                    value="{{ user.username }}">
+                                            </div>
+
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                <div class="col-md-8 col-lg-9" style="width: 560px; margin-left: 7px;">
+                                                    <input name="email" type="email" class="form-control"
+                                                        value="{{ user.email }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button type="submit" class="btn"
+                                                    style="background-color: #005555; color: white; margin-right: 20px;">Save Changes</button>
+                                            </div>
+                                    </form>
+                                    <!-- End Profile Edit Form -->
+                                </div>
+
+
+
+                                <!-- <div class="tab-pane fade pt-3" id="profile-change-password">
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                      <input type="hidden" name="change_password" value="1">
+                                  
+                                      <div class="row mb-3">
+                                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                        <div class="col-md-8 col-lg-9">
+                                          <input name="currentPassword" type="password" class="form-control" id="currentPassword" required>
+                                        </div>
+                                      </div>
+                                  
+                                      <div class="row mb-3">
+                                        <label for="newpassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                        <div class="col-md-8 col-lg-9">
+                                          <input name="newpassword" type="password" class="form-control" id="newpassword" required>
+                                        </div>
+                                      </div>
+                                  
+                                      <div class="row mb-3">
+                                        <label for="renewpassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                        <div class="col-md-8 col-lg-9">
+                                          <input name="renewpassword" type="password" class="form-control" id="renewpassword" required>
+                                        </div>
+                                      </div>
+                                  
+                                      <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                      </div>
+                                    </form>
+                                  </div> -->
+
+                            </div><!-- End Bordered Tabs -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+
+
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/media/assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="/media/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/media/assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="/media/assets/vendor/echarts/echarts.min.js"></script>
+    <script src="/media/assets/vendor/quill/quill.min.js"></script>
+    <script src="/media/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="/media/assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="/media/assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="/media/assets/js/main.js"></script>
+
+</body>
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_4.jpg')">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">Customer Contact Information</h1>
+
+        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+          <ol class="breadcrumb text-center justify-content-center">
+            <li class="breadcrumb-item"><a href="index.html">Land</a></li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">
+              Contact
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h1 style="text-align: center; margin-top: 10px;">Contact Information</h1>
+
+<div class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
+        <div class="contact-info">
+          <div class="address mt-2">
+            <i class="icon-room"></i>
+            <h4 class="mb-2">Location:</h4>
+            <p>
+              43 Raymouth Rd. Baltemoer,<br />
+              London 3910
+            </p>
+          </div>
+
+          <div class="open-hours mt-4">
+            <i class="icon-clock-o"></i>
+            <h4 class="mb-2">Open Hours:</h4>
+            <p>
+              Sunday-Friday:<br />
+              10:00 AM - 5:00 PM
+            </p>
+          </div>
+
+          <div class="email mt-4">
+            <i class="icon-envelope"></i>
+            <h4 class="mb-2">Email:</h4>
+            <p>Landhub@gmail.com</p>
+          </div>
+
+          <div class="phone mt-4">
+            <i class="icon-phone"></i>
+            <h4 class="mb-2">Call:</h4>
+            <p>+1 8543 5588 55</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+        <form method="POST" novalidate class="needs-validation">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-6 mb-3">
+              <input type="text" name="name" class="form-control" placeholder="Your Name" required />
+              <div class="invalid-feedback">Please enter your name</div>
+            </div>
+            <div class="col-6 mb-3">
+              <input type="email" name="email" class="form-control" placeholder="Your Email" required />
+              <div class="invalid-feedback">Please enter a valid email</div>
+            </div>
+            <div class="col-12 mb-3">
+              <input type="text" name="subject" class="form-control" placeholder="Subject" required />
+              <div class="invalid-feedback">Please enter the subject</div>
+            </div>
+            <div class="col-12 mb-3">
+              <textarea name="message" cols="30" rows="7" class="form-control" placeholder="Message"
+                required></textarea>
+              <div class="invalid-feedback">Please enter your issue in detail</div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Send Message</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- ✅ Add this script at the bottom of the page or in a script block -->
+      <script>
+        // Bootstrap custom validation
+        (function () {
+          'use strict';
+          window.addEventListener('load', function () {
+            // Get all forms with class 'needs-validation'
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over forms and prevent submission if invalid
+            var validation = Array.prototype.filter.call(forms, function (form) {
+              form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+      </script>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

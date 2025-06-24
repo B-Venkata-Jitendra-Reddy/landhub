@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading" data-aos="fade-up">Applay For Agent Permissions</h1>
+
+                <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                    <ol class="breadcrumb text-center justify-content-center">
+                        <li class="breadcrumb-item"><a href="index.html">Agent</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">
+                            Properties
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+    <h2 class="mb-4">Pending Agent Applications</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Current Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in pending_users %}
+            <tr>
+                <td>{{ profile.user.username }}</td>
+                <td>{{ profile.user.email }}</td>
+                <td>{{ profile.role }}</td>
+                <td>
+                    <a href="{% url 'approve_agent' profile.user.id %}" class="btn btn-success btn-sm">Approve</a>
+                    <a href="{% url 'reject_agent' profile.user.id %}" class="btn btn-danger btn-sm">Not Approve</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center text-muted">No pending applications.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

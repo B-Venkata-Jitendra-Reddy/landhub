@@ -1,0 +1,213 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+
+<head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Favicons -->
+    <link href="/media/assets/img/favicon.png" rel="icon">
+    <link href="/media/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vendor CSS Files -->
+    <link href="/media/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/media/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/media/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/media/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="/media/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="/media/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/media/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/media/assets/css/style.css" rel="stylesheet">
+    <link href="/media/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">Manage All Properties</h1>
+
+                    <!-- <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                        <ol class="breadcrumb text-center justify-content-center">
+                            <li class="breadcrumb-item"><a href="index.html">Edit Profile</a></li>
+                            <li class="breadcrumb-item active text-white-50" aria-current="page">
+                                Profile Details
+                            </li>
+                        </ol>
+                    </nav> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <main id="main" class="main">
+
+        <!-- Page Title -->
+        <div class="pagetitle">
+            <h1 style="color: #00204A; font-size: xx-large; margin-top: -50px; margin-left: 150px;">Properties Data
+                Tables</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Tables</li>
+                    <li class="breadcrumb-item active">Data</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section container-fluid"> <!-- container-fluid for full width -->
+            <div class="row">
+                <div class="col-12"> <!-- Full width column -->
+
+                    <div class="card shadow-sm rounded-4 border-0"
+                        style="margin-left: -320px; margin-top: -100px; width: 75rem !important;">
+                        <!-- Ensure card is 100% width -->
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-3" style="color: #005555;">Manage Properties</h5>
+                            <p class="text-muted mb-4">
+                                Easily manage and view land property details using the
+                                <a href="https://github.com/fiduswriter/Simple-DataTables" target="_blank"
+                                    style="color: #007777;">
+                                    Simple DataTables
+                                </a> library.
+                            </p>
+
+                            <!-- Table -->
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover datatable align-middle text-nowrap">
+                                    <thead class="table-light">
+                                        <tr class="text-center">
+                                            <th>NO</th>
+                                            <th>Owner</th>
+                                            <th>State</th>
+                                            <th>City</th>
+                                            <th>Location</th>
+                                            <th>Cell</th>
+                                            <th>Email</th>
+                                            <th>Water</th>
+                                            <th>Electricity</th>
+                                            <th>Land Type</th>
+                                            <th>Total Area</th>
+                                            <th>Soil Type</th>
+                                            <th>Owner Photo</th>
+                                            <th>Ownership Proof</th>
+                                            <th>Land Image</th>
+                                            <th>Verified Property</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for Property in properties %}
+                                        <tr>
+                                            <td class="text-center">{{ forloop.counter }}</td>
+                                            <td>{{ Property.owner.username }}</td>
+                                            <td>{{ Property.state }}</td>
+                                            <td>{{ Property.city }}</td>
+                                            <td>{{ Property.location }}</td>
+                                            <td>{{ Property.phone }}</td>
+                                            <td>{{ Property.email }}</td>
+                                            <td>{{ Property.water_source }}</td>
+                                            <td>{{ Property.electricity_connection }}</td>
+                                            <td>{{ Property.land_type }}</td>
+                                            <td>{{ Property.total_area }}</td>
+                                            <td>{{ Property.soil_type }}</td>
+
+                                            <td class="text-center">
+                                                {% if Property.land_owner_photo %}
+                                                <img src="{{ Property.land_owner_photo.url }}" alt="Owner Photo"
+                                                    class="img-thumbnail border"
+                                                    style="height: 70px; width: 80px; border-radius: 0.5rem;">
+                                                {% else %} <span class="text-muted">No photo</span> {% endif %}
+                                            </td>
+
+                                            <td class="text-center">
+                                                {% if Property.ownership_proof %}
+                                                <img src="{{ Property.ownership_proof.url }}" alt="Proof"
+                                                    class="img-thumbnail border"
+                                                    style="height: 70px; width: 80px; border-radius: 0.5rem;">
+                                                {% else %} <span class="text-muted">No proof</span> {% endif %}
+                                            </td>
+
+                                            <td class="text-center">
+                                                {% with Property.land_images.all|first as first_image %}
+                                                {% if first_image %}
+                                                <img src="{{ first_image.image.url }}" alt="Land"
+                                                    class="img-thumbnail border"
+                                                    style="height: 70px; width: 80px; border-radius: 0.5rem;">
+                                                {% else %}
+                                                <span class="text-muted">No image</span>
+                                                {% endif %}
+                                                {% endwith %}
+                                            </td>
+
+                                            <td class="text-center">
+                                                {% if Property.ownership_proof %}
+                                                <img src="/media/images/verified.png" alt="Verified"
+                                                    class="img-thumbnail border"
+                                                    style="height: 70px; width: 80px; border-radius: 0.5rem;">
+                                                {% else %}
+                                                <span class="text-muted">Not verified Property</span>
+                                                {% endif %}
+                                            </td>
+
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="15" class="text-center text-muted">No properties found.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- End Table -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+
+
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/media/assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="/media/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/media/assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="/media/assets/vendor/echarts/echarts.min.js"></script>
+    <script src="/media/assets/vendor/quill/quill.min.js"></script>
+    <script src="/media/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="/media/assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="/media/assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="/media/assets/js/main.js"></script>
+
+</body>
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit Property{% endblock %}
+
+{% block content %}
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">Edit Property</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-3" style="margin-bottom: 10rem;">
+  <div class="col-8 offset-2">
+    <br>
+    <h3 style="text-align: center;">Edit Your Property Details</h3>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'edit_property' Property.id %}" novalidate
+      class="needs-validation">
+      {% csrf_token %}
+      <style>
+        /* Style the "Choose Files" button only */
+        input[type="file"].form-control::file-selector-button {
+          background-color: #005555;
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 0.375rem 0 0 0.375rem;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        input[type="file"].form-control::file-selector-button:hover {
+          background-color: #007777;
+        }
+
+        /* Optional: fix input padding to align with Bootstrap style */
+        input[type="file"].form-control {
+          padding: 0.375rem 0.75rem;
+        }
+
+        .form-control {
+          height: 40px;
+        }
+      </style>
+
+
+      <div class="mb-3">
+        <label for="land_image" class="form-label">Upload Land Image</label>
+        <input name="land_image" type="file" multiple accept="image/*" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label for="land_owner_photo" class="form-label">Upload Land Owner Photo</label>
+        <input name="land_owner_photo" type="file" accept="image/*" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label for="ownership_proof" class="form-label">Upload Land Ownership Proof</label>
+        <input name="ownership_proof" type="file" accept="image/*" class="form-control" />
+      </div>
+
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" maxlength="100" rows="4"
+          required>{{ Property.description }}</textarea>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label class="form-label">Water Source</label>
+          <input name="water_source" class="form-control" value="{{ Property.water_source }}" required />
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label class="form-label">Electricity Connection</label>
+          <input name="electricity_connection" type="text" class="form-control"
+            value="{{ Property.electricity_connection }}" required />
+        </div>
+
+        <div class="mb-3 col-md-4" style="width: 503px;">
+          <label class="form-label">Land Type</label>
+          <input name="land_type" class="form-control" value="{{ Property.land_type }}" required />
+        </div>
+
+        <div class="mb-3 col-md-8" style="width: 350px;">
+          <label class="form-label">Total Area</label>
+          <input name="total_area" type="text" class="form-control" value="{{ Property.total_area }}" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Soil Type</label>
+          <input name="soil_type" type="text" class="form-control" value="{{ Property.soil_type }}" required />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label class="form-label">State</label>
+          <input name="country" class="form-control" value="{{ Property.state }}" required />
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label class="form-label">City</label>
+          <input name="city" type="text" class="form-control" value="{{ Property.city }}" required />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Location / Address</label>
+        <input name="location" type="text" class="form-control" value="{{ Property.location }}" required />
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label class="form-label">Phone Number</label>
+          <input name="phone" type="text" class="form-control" value="{{ Property.phone }}" required />
+        </div>
+
+        <div class="mb-3 col-md-4" style="width: 565px;">
+          <label class="form-label">Email</label>
+          <input id="emailInput" name="email" type="email" class="form-control" value="{{ Property.email }}" />
+          <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary">Update Property</button>
+      <br><br>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

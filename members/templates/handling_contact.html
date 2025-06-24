@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit Property{% endblock %}
+
+{% block content %}
+
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">Handling Contacts</h1>
+
+        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+          <ol class="breadcrumb text-center justify-content-center">
+            <li class="breadcrumb-item"><a href="index.html">Land</a></li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">
+              Properties
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    background-color: #f9fafa;
+    border-radius: 1rem !important;
+    padding: 1.5rem 2rem !important;
+    box-shadow: 0 4px 20px rgba(0, 85, 85, 0.08) !important;
+    border: 1px solid #e1e5e9 !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 85, 85, 0.12) !important;
+  }
+
+  .card h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #005555;
+    margin-bottom: 0.75rem;
+  }
+
+  .card p {
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  .card small.text-muted {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  .container>h2 {
+    font-weight: 600;
+    color: #003333;
+    margin-bottom: 2rem;
+  }
+</style>
+
+<div class="container my-5">
+  <h2 style="text-align: center;">Handling Contacts</h2>
+  <div class="row g-4">
+    {% for msg in contact_messages %}
+    <div class="col-md-6 col-lg-4 d-flex">
+      <div class="card p-3 shadow-sm rounded-3 w-100">
+        <div class="d-flex align-items-center mb-2">
+          {% if msg.user and msg.user.userprofile.profile_picture %}
+          <img src="{{ msg.user.userprofile.profile_picture.url }}" class="rounded-circle me-3"
+            style="height: 50px; width: 50px;" alt="User">
+          {% else %}
+          <img src="/media/images/Profile_Icon.jpeg" class="rounded-circle me-3" style="height: 50px; width: 50px;"
+            alt="Default">
+          {% endif %}
+
+          <div>
+            {% if msg.user %}
+            <h6 class="mb-0">{{ msg.user.username }}</h6>
+            {% else %}
+            <h6 class="mb-0">{{ msg.name }}</h6>
+            {% endif %}
+            <small class="text-muted">{{ msg.email }}</small>
+          </div>
+        </div>
+        <h5>{{ msg.subject }}</h5>
+        <p>{{ msg.message }}</p>
+        <small class="text-muted">{{ msg.timestamp }}</small>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+{% endblock %}

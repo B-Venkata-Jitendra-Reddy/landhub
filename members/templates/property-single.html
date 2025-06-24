@@ -1,0 +1,702 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">
+          5232 California AVE. 21BC
+        </h1>
+
+        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+          <ol class="breadcrumb text-center justify-content-center">
+            <li class="breadcrumb-item"><a href="index.html">Land</a></li>
+            <li class="breadcrumb-item">
+              <a href="properties.html">Properties</a>
+            </li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">
+              5232 California AVE. 21BC
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="section">
+  <div class="container">
+    <div class="row justify-content-between">
+      <!-- <div class="col-lg-7">
+        <div class="img-property-slide-wrap" style="width: 700px; ">
+          <div class="img-property-slide" style="height: 800px; ">
+            {% if Property.land_image %}
+            <img src="{{ Property.land_image.url }}" alt="Land Image" class="img-fluid" />
+            {% endif %}
+            {% if Property.ownership_proof %}
+            <img src="{{ Property.ownership_proof.url }}" alt="Ownership Proof" class="img-fluid" />
+            {% else %}
+            <p>No ownership proof uploaded.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div> -->
+
+      <div class="col-lg-7">
+        <div class="img-property-slide-wrap" style="width: 45rem;">
+          <div class="img-property-slide">
+            {% for image in Property.land_images.all %}
+            <img src="{{ image.image.url }}" alt="Land Image" class="img-fluid mb-2"
+              style="height: 600px; border-radius: 15px;" />
+            {% empty %}
+            <p>No land images uploaded.</p>
+            {% endfor %}
+
+            {% if Property.ownership_proof %}
+            <img src="{{ Property.ownership_proof.url }}" alt="Ownership Proof" class="img-fluid mt-2"
+              style="height: 600px; border-radius: 15px;" />
+            {% else %}
+            <p>No ownership proof uploaded.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <h2 class="heading text-primary" style="font-size: 35px;"> {{ Property.location }}</h2>
+        <br>
+
+        <h5 class="meta" style="font-size: 30px;"><b>{{Property.state}}, {{ Property.city }}</b></h5>
+        <br>
+        <p class="text-black-50" style="font-size: 20px;">
+          <b> Description: </b>{{ Property.description|truncatechars:150 }}
+        </p>
+
+
+
+        <!-- Facilities -->
+        <div class="specs mb-3">
+          <p class="text-black-50" style="font-size: 23px; text-decoration: underline; margin-top: 30px;"> <b>
+              Facilities: </b> </p>
+
+          <!-- Water Facility -->
+          <span class="d-block d-flex align-items-center me-3 mr-3 mb-1"
+            style="font-size: 20px; margin-bottom: 10px !important;">
+            <span class="bi bi-droplet-half me-2"></span>
+            <span class="caption"><b>Water Source:</b> {{ Property.water_source }}</span>
+          </span>
+
+          <!-- Electricity Facility -->
+          <span class="d-block d-flex align-items-center me-3 mr-3 mb-1"
+            style="font-size: 20px; margin-bottom: 10px !important;">
+            <span class="fa-solid fa-bolt me-2"></span>
+            <span class="caption"><b>Electricity:</b> {{ Property.electricity_connection }}</span>
+          </span>
+
+          <!-- Total Area -->
+          <span class="d-block d-flex align-items-center me-3 mr-3 mb-1"
+            style="font-size: 20px; margin-bottom: 10px !important;">
+            <span class="icon-map me-2"></span>
+            <span class="caption"><b>Total Area:</b> {{ Property.total_area }}</span>
+          </span>
+
+          <!-- Land Type -->
+          <span class="d-block d-flex align-items-center me-3 mr-3 mb-1"
+            style="font-size: 20px; margin-bottom: 10px !important;">
+            <span class="icon-briefcase me-2"></span>
+            <span class="caption"><b>Land Type:</b> {{ Property.land_type }}</span>
+          </span>
+
+          <!-- Soil Type -->
+          <span class="d-block d-flex align-items-center mr-3 mb-1" style="font-size: 20px;">
+            <span class="icon-leaf me-2"></span>
+            <span class="caption"><b>Soil Type:</b> {{ Property.soil_type }}</span>
+          </span>
+        </div>
+
+
+        <!-- Edit and delete property button -->
+        {% if Property.owner == request.user or request.user.is_superuser %}
+        <div style="display: flex; gap: 5px; margin: 50px 0px 95px 0px;  ">
+
+          <form id="delete-form" method="POST" action="{% url 'delete_property' Property.id %}" style="flex: 1;">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger w-100" style="height: 50px;"
+              onclick="confirmDelete()">Delete</button>
+          </form>
+
+          <a href="{% url 'edit_property' Property.id %}" class="btn btn-warning w-100"
+            style="flex: 1; height: 50px; display: flex; align-items: center; justify-content: center; background-color: #005555; color: white;">
+            Edit
+          </a>
+        </div>
+        {% endif %}
+
+        <!-- delete Warning -->
+        <script>
+          function confirmDelete() {
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, delete it!',
+              reverseButtons: true
+            }).then((result) => {
+              if (result.isConfirmed) {
+                document.getElementById('delete-form').submit();
+              }
+            });
+          }
+        </script>
+
+
+
+
+
+        <!-- property owner card -->
+        <div class="d-block agent-box p-5"
+          style="position: sticky; height: 420px; margin-top: 250px; transition: all 0.3s ease;"
+          onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'"
+          onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+
+          <div class="img mb-1 mt-3">
+            <h4 class="mb-4" style="text-align: center; margin-top: -50px; text-decoration: underline;">Property Owner
+            </h4>
+            {% if Property.land_owner_photo %}
+            <img src="{{ Property.land_owner_photo.url }}" alt="Land Owner Photo" class="img-fluid"
+              style="height: 80px; width: 80px; border-radius: 100%; display: block; margin: 0 auto;" />
+
+            <h4 class="mt-1" style="text-align: center; text-decoration: underline; font-weight: bold;">
+              {{ Property.owner.username }}</h4>
+
+            <span class="d-block d-flex align-items-center me-3 mr-3 mb-1">
+              <ul class="list-unstyled social dark-hover d-flex" style="margin-top: 1rem;">
+                <li class="me-1">
+                  <a href="https://wa.me/{{ Property.phone }}" target="_blank">
+                    <span class="icon-whatsapp"></span>
+                  </a>
+                </li>
+              </ul>
+              <span class="caption" style="font-size: 15px;">Click Here TO Contact & Chart With Owner</span>
+            </span>
+
+            {% else %}
+            <p style="color: rgb(215, 25, 25);">No land owner photo uploaded.</p>
+            {% endif %}
+          </div>
+
+          <div class="text">
+            <span class="d-block d-flex align-items-center me-3 mr-3 mb-1">
+              <span class="me-2"><i class="fa-solid fa-phone-volume"></i></span>
+              <span class="caption" style="font-size: 15px;">Cell: {{ Property.phone }}</span>
+            </span>
+
+            <span class="d-block d-flex align-items-center mr-3 mb-1">
+              <span class="me-2"><i class="fa-solid fa-envelope"></i></span>
+              <span class="caption" style="font-size: 15px;">Mail: {{ Property.email }}</span>
+            </span>
+
+            <span class="d-block d-flex align-items-center mr-3 mb-1">
+              <span class="me-2"><i class="fa-solid fa-address-card"></i></span>
+              <span class="caption" style="font-size: 15px;">Address: {{ Property.location }}</span>
+            </span>
+
+            <span class="d-block d-flex align-items-center mr-3 mb-1">
+              <span class="me-2"><i class="fa-solid fa-city"></i></span>
+              <span class="caption" style="font-size: 15px;">State/City: {{ Property.state }}, {{ Property.city}}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Book Visit Button - Visible to all users -->
+<!-- <div style="margin-top: -465px; margin-bottom: 5rem; width: 45rem; margin-left: 4.5rem;">
+  <form method="POST" action="{% url 'book_visit' Property.id %}" class="visit-card">
+    {% csrf_token %}
+    <h2 style="text-align: center;"> Book For Visit</h2>
+    <input type="text" name="full_name" placeholder="Your Full Name" required class="form-control">
+    <input type="email" name="email" placeholder="Your Email" required class="form-control">
+    <input type="number" name="phone_number" placeholder="Phone Number" required class="form-control" pattern="\d{10}"
+      maxlength="10" title="Please enter a 10-digit phone number">
+    <textarea name="message" placeholder="Your message (optional)" class="form-control" rows="2"></textarea>
+    <button type="submit" class="btn btn-warning w-100 mt-2">Book Visit</button>
+  </form>
+</div> -->
+<div style="margin-top: -480px; margin-bottom: 5rem; width: 45rem; margin-left: 4.5rem;">
+  <form method="POST" action="{% url 'book_visit' Property.id %}" class="visit-card">
+    {% csrf_token %}
+    <h2 style="text-align: center;"> Book For Visit</h2>
+
+    <!-- Full Name -->
+    <input type="text" name="full_name" placeholder="Your Full Name" value="{{ user.first_name }}" required
+      class="form-control">
+
+    <!-- Email -->
+    <input type="email" name="email" placeholder="Your Email" value="{{ user.email }}" required class="form-control">
+
+    <!-- Phone Number -->
+    <input type="tel" name="phone_number" placeholder="Phone Number" pattern="\d{10}" maxlength="10" required
+      class="form-control" title="Please enter a 10-digit phone number">
+
+    <!-- Optional Message -->
+    <textarea name="message" placeholder="Your message (optional)" class="form-control" rows="2" required></textarea>
+
+    <button type="submit" class="btn btn-warning w-100 mt-2">Book Visit</button>
+  </form>
+</div>
+
+
+
+
+
+<!-- map -->
+<hr>
+<!-- Google Map Container -->
+<h3 class="mb-4" style="font-weight: bold; margin: 50px 0px 10px 430px;">
+  <i class="fa-solid fa-location-crosshairs"></i>
+  Find Your Way to the Land
+</h3>
+<div id="map" style="height: 450px; width: 90%; margin: 10px 0px 0px 60px; border-radius: 25px;" data-aos="fade-up"
+  data-aos-delay="200"></div>
+
+<!-- Wrapper for Side-by-Side Layout -->
+<div style="margin: 20px 0px 50px 350px; display: flex; gap: 20px; align-items: center;">
+
+  <!-- Get Directions Button -->
+  <!-- <button onclick="startLiveDirections()"
+    style="font-size: 16px; background-color: #005555; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;"
+    class="btn mt-2">
+    <i class="fa-solid fa-diamond-turn-right" style="font-size: x-large;"></i>
+    &nbsp; Get Directions to Property
+  </button> -->
+  <!-- Button -->
+  <button onclick="startLiveDirections()"
+    style="font-size: 16px; background-color: #005555; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;"
+    class="btn mt-2">
+    <i class="fa-solid fa-diamond-turn-right" style="font-size: x-large;"></i>
+    &nbsp; Start Live Navigation
+  </button>
+
+  <!-- Google Maps Link Styled as Button -->
+  <a href="{{ Property.map_link }}" target="_blank"
+    style="font-size: 16px; background-color: #005555; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; display: inline-block;"
+    class="btn mt-2">
+    <i class="fa-solid fa-map-location-dot" style="font-size: x-large;"></i>
+    &nbsp; View on Google Maps
+  </a>
+
+</div>
+
+<!-- Google Maps Script -->
+<!-- <script>
+  let map;
+  let directionsService;
+  let directionsRenderer;
+  let destination;
+
+  function initMap() {
+    const geocoder = new google.maps.Geocoder();
+    const address = "{{ Property.location }}, {{ Property.city }}, {{ Property.state }}";
+
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status === 'OK') {
+        destination = results[0].geometry.location;
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: destination,
+        });
+
+        Marker at property location
+        const marker = new google.maps.Marker({
+          map: map,
+          position: destination,
+        });
+
+        Info window on hover
+        const infowindow = new google.maps.InfoWindow({
+          content: `<b>${address}</b>`,
+        });
+
+        marker.addListener('mouseover', function () {
+          infowindow.open(map, marker);
+        });
+
+        marker.addListener('mouseout', function () {
+          infowindow.close();
+        });
+
+        Setup directions service
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: false });
+        directionsRenderer.setMap(map);
+
+      } else {
+        console.error('Geocode failed: ' + status);
+      }
+    });
+  }
+
+  function getDirections() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const origin = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          const request = {
+            origin: origin,
+            destination: destination,
+            travelMode: 'DRIVING',
+          };
+
+          directionsService.route(request, function (result, status) {
+            if (status === 'OK') {
+              directionsRenderer.setDirections(result);
+            } else {
+              alert('Could not get directions: ' + status);
+            }
+          });
+        },
+        function () {
+          alert('Location permission denied. Please enable location services.');
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  }
+</script> -->
+<!-- Google Maps Script -->
+
+<script>
+  let map;
+  let destination;
+  let userMarker;
+  let directionsService;
+  let directionsRenderer;
+  let watchId;
+
+  function initMap() {
+    const geocoder = new google.maps.Geocoder();
+    const address = "{{ Property.location }}, {{ Property.city }}, {{ Property.state }}";
+
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status === 'OK') {
+        destination = results[0].geometry.location;
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: destination,
+          zoom: 14,
+        });
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({
+          map: map,
+          suppressMarkers: false
+        });
+
+        // Create Property Marker
+        const propertyMarker = new google.maps.Marker({
+          map: map,
+          position: destination,
+          title: 'Property Location',
+        });
+
+        // Styled Info Window Content
+        const infoWindowContent = `
+          <div style="
+            background-color: #005555;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            max-width: 240px;
+            font-family: 'Segoe UI', sans-serif;
+          ">
+            <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">
+              <i class="fa-solid fa-diamond-turn-right" style="font-size: smaller;"></i> {{ Property.location }}, {{ Property.city }}, {{ Property.state }}
+            </div>
+            <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">
+              Total Area: {{ Property.total_area }} sq ft
+            </div>
+          </div>
+        `;
+        const infoWindow = new google.maps.InfoWindow({
+          content: infoWindowContent
+        });
+
+        // Show styled popup on hover
+        propertyMarker.addListener("mouseover", function () {
+          infoWindow.open(map, propertyMarker);
+        });
+        propertyMarker.addListener("mouseout", function () {
+          infoWindow.close();
+        });
+
+      } else {
+        alert('Failed to geocode property address: ' + status);
+      }
+    });
+  }
+
+  function startLiveDirections() {
+    if (!destination) {
+      alert("Map not fully loaded yet.");
+      return;
+    }
+
+    if (navigator.geolocation) {
+      watchId = navigator.geolocation.watchPosition(
+        function (position) {
+          const origin = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          // Create or update user marker
+          if (!userMarker) {
+            userMarker = new google.maps.Marker({
+              map: map,
+              position: origin,
+              title: "Your Location",
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: "#4285F4",
+                fillOpacity: 1,
+                strokeColor: "#fff",
+                strokeWeight: 2,
+              }
+            });
+          } else {
+            userMarker.setPosition(origin);
+          }
+
+          // Draw route
+          const request = {
+            origin: origin,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING,
+          };
+
+          directionsService.route(request, function (result, status) {
+            if (status === "OK") {
+              directionsRenderer.setDirections(result);
+            } else {
+              console.warn("Directions request failed: " + status);
+            }
+          });
+        },
+        function (error) {
+          alert("Error getting location: " + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 10000
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+</script>
+
+<!-- Google Maps API Loader -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC62hR7TQUVCGsq3-29deCb7cPMkeWFQ3c&callback=initMap">
+  </script>
+<!-- end map -->
+
+
+
+
+
+
+
+
+
+
+<!-- review -->
+<div class="col-8 offset-2 mb-3">
+  {% if user.is_authenticated %}
+  <hr />
+  <h4 class="mb-4" style="font-weight: bold;">Leave a Review</h4>
+  <form action="{% url 'add_review' Property.id %}" method="POST" novalidate class="needs-validation p-4 shadow rounded"
+    style="background-color: #f9f9f9;">
+    {% csrf_token %}
+    <div class="mb-3 mt-3">
+      <label for="rating" class="form-label">Rating</label>
+      <fieldset class="starability-slot">
+        <input type="radio" id="first-rate1" name="rating" value="1" required />
+        <label for="first-rate1" title="Terrible">1 star</label>
+        <input type="radio" id="first-rate2" name="rating" value="2" />
+        <label for="first-rate2" title="Not good">2 stars</label>
+        <input type="radio" id="first-rate3" name="rating" value="3" />
+        <label for="first-rate3" title="Average">3 stars</label>
+        <input type="radio" id="first-rate4" name="rating" value="4" />
+        <label for="first-rate4" title="Very good">4 stars</label>
+        <input type="radio" id="first-rate5" name="rating" value="5" />
+        <label for="first-rate5" title="Amazing">5 stars</label>
+      </fieldset>
+    </div>
+
+    <div class="mb-3 mt-4">
+      <label for="comment" class="form-label">Comments</label>
+      <textarea name="comment" id="comment" cols="30" rows="4" class="form-control"
+        placeholder="Write your review here..." required></textarea>
+      <div class="invalid-feedback">Please add some comments for the review.</div>
+    </div>
+
+    <button class="btn w-100" style="background-color: #005555; color: white; font-weight: bold;">Submit Review</button>
+  </form>
+  {% endif %}
+
+  <br><br>
+
+  {% if Property.reviews.all %}
+  <div class="mb-5">
+    <h5 class="mb-4 text-center"><b>All Reviews</b></h5>
+
+    <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        {% for review in Property.reviews.all %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="card border-0 rounded-4 shadow-sm mx-auto px-3 py-3"
+            style="width: 700px; height: 250px; background-color: #fefdfd;">
+            <div class="d-flex align-items-start gap-3">
+
+              <!-- Reviewer Profile Image -->
+              {% if review.author.userprofile and review.author.userprofile.profile_picture %}
+              <img src="{{ review.author.userprofile.profile_picture.url }}" alt="{{ review.author.username }}"
+                class="rounded-circle shadow-sm" style="width: 50px; height: 50px; ">
+              {% else %}
+              <div
+                class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow-sm"
+                style="width: 100px; height: 50px; font-size: 25px;">
+                {{ review.author.username|slice:":1"|upper }}
+              </div>
+              {% endif %}
+
+              <!-- Review Content -->
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 class="mb-0 fw-semibold">{{ review.author.first_name }}</h6>
+                    <small class="text-muted">{{ review.created_at|timesince }} ago</small>
+                  </div>
+
+                  <!-- Show delete button only if current user is the review's author -->
+                  {% if review.author == user %}
+                  <form method="POST" action="{% url 'delete_review' Property.id review.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm p-0 border-0 bg-transparent" title="Delete review">
+                      <i class="bi bi-trash-fill text-danger"></i>
+                    </button>
+                  </form>
+                  {% endif %}
+                </div>
+
+                <!-- Rating -->
+                <div class="mt-2 mb-1">
+                  <p class="starability-result" data-rating="{{ review.rating }}"></p>
+                </div>
+
+                <!-- Comment -->
+                <p class="mb-2">“{{ review.comment }}”</p>
+
+                <!-- Like Button -->
+                <div class="d-flex align-items-center gap-3 text-muted small">
+                  <form method="POST" action="{% url 'like_review' review.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link p-0 text-muted d-flex align-items-center gap-1">
+                      {% if user_liked %}
+                      <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
+                      {% else %}
+                      <i class="bi bi-hand-thumbs-up"></i>
+                      {% endif %}
+                      <span>{{ review.likes.count }}</span>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <!-- Carousel controls -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+
+    </div>
+  </div>
+  {% endif %}
+
+
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('.needs-validation');
+    const ratingInputs = form.querySelectorAll('input[name="rating"]');
+    const commentInput = document.getElementById('comment');
+
+    form.addEventListener('submit', function (event) {
+      let ratingSelected = false;
+      ratingInputs.forEach(input => {
+        if (input.checked) {
+          ratingSelected = true;
+        }
+      });
+
+      // Clear previous validation
+      commentInput.classList.remove('is-invalid');
+
+      if (!ratingSelected || !commentInput.value.trim()) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!commentInput.value.trim()) {
+          commentInput.classList.add('is-invalid');
+        }
+
+        if (!ratingSelected) {
+          alert("Please select a star rating before submitting your review.");
+        }
+      }
+    });
+  });
+</script>
+
+
+{% endblock %}

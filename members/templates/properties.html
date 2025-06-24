@@ -1,0 +1,250 @@
+{% extends 'layout.html' %}
+
+{% block title %}Property Added{% endblock %}
+
+{% block content %}
+
+<div class="hero page-inner overlay" style="background-image: url('/media/images/hero_1.jpg')">
+  <div class="container p-5">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center">
+        <h1 class="heading" data-aos="fade-up">
+          LANDHUB
+          <p>Search Your Properties</p>
+        </h1>
+        <!-- <form id="searchForm" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
+          data-aos-delay="200">
+          <input type="text" class="form-control px-4" id="searchInput" placeholder="Enter Country, City, or Address" />
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form> -->
+        <form method="GET" action="{% url 'search_properties' %}"
+          class="narrow-w form-search d-flex align-items-stretch mb-3 flex-wrap gap-2" data-aos="fade-up"
+          data-aos-delay="200">
+
+          <!-- State Dropdown -->
+          <select name="state"
+            style="font-size: 16px; width: 150px; flex: 1; padding: 10px 16px; border: 1px solid #ced4da; border-radius: 25px; color: #747878; background-color: #fff; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 4 5%22><path fill=%22%23747878%22 d=%22M2 0L0 2h4zm0 5L0 3h4z%22/></svg>'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 10px;">
+            <option value="" disabled selected>Select State</option>
+            <option>Andhra Pradesh</option>
+            <option>Arunachal Pradesh</option>
+            <option>Assam</option>
+            <option>Bihar</option>
+            <option>Chhattisgarh</option>
+            <option>Goa</option>
+            <option>Gujarat</option>
+            <option>Haryana</option>
+            <option>Himachal Pradesh</option>
+            <option>Jharkhand</option>
+            <option>Karnataka</option>
+            <option>Kerala</option>
+            <option>Madhya Pradesh</option>
+            <option>Maharashtra</option>
+            <option>Manipur</option>
+            <option>Meghalaya</option>
+            <option>Mizoram</option>
+            <option>Nagaland</option>
+            <option>Odisha</option>
+            <option>Punjab</option>
+            <option>Rajasthan</option>
+            <option>Sikkim</option>
+            <option>Tamil Nadu</option>
+            <option>Telangana</option>
+            <option>Tripura</option>
+            <option>Uttar Pradesh</option>
+            <option>Uttarakhand</option>
+            <option>West Bengal</option>
+            <option>Andaman and Nicobar Islands</option>
+            <option>Chandigarh</option>
+            <option>Dadra and Nagar Haveli and Daman and Diu</option>
+            <option>Delhi</option>
+            <option>Jammu and Kashmir</option>
+            <option>Ladakh</option>
+            <option>Lakshadweep</option>
+            <option>Puducherry</option>
+          </select>
+
+          <!-- City Input -->
+          <input type="text" name="city" placeholder="City" class="form-control px-4"
+            style="flex: 1; border-radius: 25px; color: #747878;">
+
+          <!-- Address Input -->
+          <input type="text" name="address" placeholder="Address" class="form-control px-4"
+            style="flex: 1; border-radius: 25px; color: #747878;">
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary" style="border-radius: 25px;">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- {% if messages %}
+{% for message in messages %}
+<div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% endif %} -->
+
+<div class="section">
+  <div class="container">
+    <div class="row mb-5 align-items-center">
+      <div class="col-lg-6 text-center mx-auto">
+        <h2 class="font-weight-bold text-primary heading" style="margin-top: -40px;">
+          Featured Properties
+        </h2>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="section section-properties" style="margin-top: -80px;">
+    <div class="container">
+      <div class="row">
+
+        {% for Property in properties %}
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <div class="property-item mb-30" style="border-radius: 25px;">
+
+
+            <div style="position: relative;">
+
+              {% if Property.ownership_proof %}
+              <!-- Verified icon -->
+              <div style="position: absolute; top: 10px; right: 15px; z-index: 10;">
+                <img src="/media/images/verified.png" alt="Verified" style="height: 50px; width: 50px;"
+                  title="Ownership Verified">
+              </div>
+              {% endif %}
+
+              {% if Property.land_images.all %}
+              <div id="landImageCarousel" class="carousel slide" data-bs-ride="carousel"
+                style="border-radius: 25px 25px 0 0; overflow: hidden;">
+                <div class="carousel-inner">
+                  {% for image in Property.land_images.all %}
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ image.image.url }}" class="d-block w-100" style="height: 350px; object-fit: cover;"
+                      alt="Land Image">
+                  </div>
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#landImageCarousel"
+                  data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#landImageCarousel"
+                  data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+              </div>
+              {% else %}
+              <img src="/media/images/land-11.jpg" alt="Default Image" class="img-fluid"
+                style="height: 350px; width: 100%; border-radius: 25px 25px 0 0; object-fit: cover;" />
+              {% endif %}
+            </div>
+
+
+
+
+            <!-- PROPERTY CONTENT -->
+            <div class="property-content" style="border-radius: 0 0 25px 25px;">
+              <div>
+                <h5 class="d-block mb-2 text-black-50">
+                  {{ Property.location }}
+                </h5>
+
+                <span class="city d-block mb-3">{{ Property.state }}, {{ Property.city }}</span>
+
+                <div class="specs mb-3">
+                  <span class="d-block d-flex align-items-center me-3 mr-3 mb-1">
+                    <span class="bi bi-droplet-half me-2"></span>
+                    <span class="caption">Water Source: {{ Property.water_source }}</span>
+                  </span>
+
+                  <span class="d-block d-flex align-items-center me-3 mr-3 mb-1">
+                    <span class="fa-solid fa-bolt me-2"></span>
+                    <span class="caption">Electricity: {{ Property.electricity_connection }}</span>
+                  </span>
+
+                  <span class="d-block d-flex align-items-center me-3 mr-3 mb-1">
+                    <span class="icon-map me-2"></span>
+                    <span class="caption">Total Area & Plot No: {{ Property.total_area }}</span>
+                  </span>
+
+                  <span class="d-block d-flex align-items-center me-3 mr-3 mb-1">
+                    <span class="icon-briefcase me-2"></span>
+                    <span class="caption">Land Type: {{ Property.land_type }}</span>
+                  </span>
+
+                  <span class="d-block d-flex align-items-center mr-3 mb-1">
+                    <span class="icon-leaf me-2"></span>
+                    <span class="caption">Soil Type: {{ Property.soil_type }}</span>
+                  </span>
+                </div>
+
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'single_property' Property.id %}" class="btn btn-primary py-2 px-3">
+                  See details
+                </a>
+                {% else %}
+                <button class="btn btn-primary py-2 px-3" onclick="showLoginSignupModal()">
+                  See details
+                </button>
+                {% endif %}
+
+                <script>
+                  function showLoginSignupModal() {
+                    var modal = new bootstrap.Modal(document.getElementById('loginSignupModal'));
+                    modal.show();
+                  }
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <!-- <div class="row align-items-center py-5">
+      <div class="col-lg-3">Pagination (1 of 10)</div>
+      <div class="col-lg-6 text-center">
+        <div class="custom-pagination">
+          <a href="#">1</a>
+          <a href="#" class="active">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+</div>
+
+
+
+<!-- Login/Signup Modal -->
+<div class="modal fade" id="loginSignupModal" tabindex="-1" aria-labelledby="loginSignupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginSignupModalLabel">Please Login or Signup</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>You need to login or signup to view property details.</p>
+        <a href="{% url 'userlogin' %}" class="btn btn-primary m-2">Login</a>
+        <a href="{% url 'register' %}" class="btn btn-secondary m-2">Signup</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
